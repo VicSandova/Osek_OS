@@ -10,7 +10,7 @@
 
 #define TASKS 3
 
-
+extern uint8_t RUNNING; //Guarda el indice de la lista de la tarea que esta en running
 
 typedef enum{
 	AUTOSTART_FALSE,

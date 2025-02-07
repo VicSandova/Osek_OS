@@ -7,6 +7,8 @@
 
 Task task_list[TASKS] = {0};
 
+uint8_t RUNNING = NULL;
+
 
 void Create_task(uint8_t Task_ID, uint8_t Priority, SchedulingPolicy Schedule, Autostart Autostart, TaskFunction Ptr_Task) {
     for (int i = 0; i < TASKS; i++) {
@@ -117,12 +119,29 @@ void Terminate_task(){
             return;
         }
     }
+
+    if (RUNNING >= TASKS || task_list[RUNNING].state != TASK_RUNNING) {
+             //PRINTF("Error: No hay tarea en ejecución para encadenar.\n");
+            return;
+    	    }
+
+
     //PRINTF("No task running to terminate!\n");
 
     //Scheduler();  // Scheduler selects other task?
 }
 
 void Chain_task(uint8_t task_ID){
+
+
+	// Verificar si hay una tarea en ejecución
+    if (RUNNING >= TASKS || task_list[RUNNING].state != TASK_RUNNING) {
+         //PRINTF("Error: No hay tarea en ejecución para encadenar.\n");
+        return;
+	    }
+
+	task_list[RUNNING].state = TASK_SUSPENDED;
+	task_list[task_ID].state = TASK_READY;
 
 
 	//TERMINAR LA TEREA ACTUAL en terminate/SUSPENDED
@@ -134,17 +153,28 @@ void Chain_task(uint8_t task_ID){
 
 void Scheduler(){
 
+	uint8_t Highest_priorirty = TASKS;
+	uint8_t Selected_task = NULL;
+
+		for(uint8_t i = 0;i < TASKS;i++){
+			 if (task_list[i].state == TASK_READY && task_list[i].priority < Highest_priorirty) {
+			     Selected_task = i;
+			}
+		}
+
+		if(Selected_task != NULL){
+			task_list[RUNNING].state = TASK_READY;
+		}
+
+		task_list[Selected_task].state = TASK_RUNNING;
+		RUNNING = Selected_task;
+		task_list[Selected_task].task_ptr();
+
+
+
+
 	//verificar todas las tareas que esten en ready, ver cual tiene mayor prioridad para ponerla en running
 	//ajustar el sp y apuntar a la task
 
 }
-
-void GetTask_ID(void *Task_ptr){
-
-}
-
-void GetTask_State(uint8_t task_ID,void *Task_ptr){
-
-}
-
 
