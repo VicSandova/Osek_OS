@@ -1,16 +1,14 @@
-/*
- * OS.h
- *
- *  Created on: 3 feb. 2025
- *      Author: Eldic
- */
 
 #ifndef OS_OS_H_
 #define OS_OS_H_
 
+#include <stdint.h>
+
 #define TASKS 3
 
-extern uint8_t RUNNING; //Guarda el indice de la lista de la tarea que esta en running
+extern uint8_t TASK_ACTIVE; //Guarda el indice de la lista de la tarea que esta en running
+
+
 
 typedef enum{
 	AUTOSTART_FALSE,
@@ -28,6 +26,20 @@ typedef enum{
 	TASK_RUNNING
 }Task_State;
 
+
+
+typedef uint8_t Task_Limit;
+enum {
+    TASK_DEACTIVATED,
+    TASK_READY_TO_ACTIVATE,
+    TASK_ACTIVATED
+};
+
+typedef enum{
+		TASK_NCREATED,
+		TASK_CREATED
+}Task_Created;
+
 typedef void (*TaskFunction)(void);
 
 typedef struct{
@@ -35,11 +47,11 @@ typedef struct{
 	uint8_t task_ID;
 	uint8_t priority;
 	SchedulingPolicy Schedule;
-	uint8_t activation;
+	Task_Limit activation;
 	Autostart autostart;
 	TaskFunction task_ptr;
 	Task_State state;
-	bool Task_Created;
+	Task_Created Task_Create;
 
 }Task;
 

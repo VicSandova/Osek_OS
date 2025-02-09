@@ -21,7 +21,6 @@ int main(void) {
 	Create_task(2, 3, FULL_PREEMPTIVE, AUTOSTART_TRUE, Task_CF);
 
 
-
 	OS_init();
 
 	while(1){
@@ -32,31 +31,30 @@ int main(void) {
 	 *
 	 */
 
-
-
 	}
 
 }
 
 
 void Task_AF(){
-
-	Activate_task(1);
+	//stackp 1 guardas sp
+	Activate_task(1);//comparar el valor del stackpointer del main con el de la funcion
+	//Guardar dirección de retorno, guardar el PC
 	Terminate_task();
 
-}
+}//nunca se ejecuta la llave
 
 void Task_BF(){
 
 	Chain_task(2);
 
-}
+}//nunca se ejecuta la llave
 
 void Task_CF(){
 
 	Terminate_task();
 
-}
+}//nunca se ejecuta la llave
 
 //
 //Task task_list[TASKS] = {
