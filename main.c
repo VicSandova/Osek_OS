@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "OS/OS.h"
+#include "DRIVERS/RGB_ticks.h"
 
 void Task_AF();
 void Task_BF();
@@ -16,6 +17,8 @@ void Task_CF();
 
 
 int main(void) {
+
+	RGB_ticks_Init();
 
 	Create_task(0, 1, FULL_PREEMPTIVE, AUTOSTART_TRUE, Task_AF);
 	Create_task(1, 2, FULL_PREEMPTIVE, AUTOSTART_FALSE, Task_BF);
@@ -32,21 +35,24 @@ int main(void) {
 
 
 void Task_AF(){
-	//stackp 1 guardas sp
-	Activate_task(1);//comparar el valor del stackpointer del main con el de la funcion
-	//Guardar dirección de retorno, guardar el PC
+
+	Led_Red();
+	Activate_task(1);
+
 	Terminate_task();
 
 }//nunca se ejecuta la llave
 
 void Task_BF(){
-
+//asm(add 8)
+	Led_Blue();
 	Chain_task(2);
 
 }//nunca se ejecuta la llave
 
 void Task_CF(){
 
+	Led_Green();
 	Terminate_task();
 
 }//nunca se ejecuta la llave

@@ -4,10 +4,11 @@
 #include <stdbool.h>
 #include "fsl_common.h"
 #include "OS.h"
+#include "DRIVERS/RGB_ticks.h"
+
 
 
 Task task_list[TASKS] = {0};
-
 uint8_t TASK_ACTIVE = NO_TASK;
 
 void SleepMode(void){
@@ -28,6 +29,7 @@ void Create_task(uint8_t Task_ID, uint8_t Priority, SchedulingPolicy Schedule, A
             task_list[i].autostart = Autostart;
             task_list[i].task_ptr = Ptr_Task;
             task_list[i].state = TASK_SUSPENDED;
+
             //PRINTF("Tarea %d creada con prioridad %d\n", Task_ID, Priority);
             return;
         }
@@ -48,7 +50,7 @@ void OS_init()
 		}
 	}
 
-	asm("ADD sp, sp, #0x18");
+	asm("ADD sp, sp, #0x10");
 	//AJUSTAR SP
 	Scheduler();
 
@@ -83,6 +85,7 @@ void Terminate_task(){
 	task_list[TASK_ACTIVE].activation = TASK_READY_TO_ACTIVATE;
 	TASK_ACTIVE = NO_TASK;
 
+	Led_Off();
     asm("ADD sp, sp, #0x08");
 
     Scheduler();  // Scheduler selects other task?
@@ -94,6 +97,7 @@ void Chain_task(uint8_t task_ID){
     	task_list[TASK_ACTIVE].state = TASK_SUSPENDED;
     	task_list[TASK_ACTIVE].activation = TASK_READY_TO_ACTIVATE;
     	TASK_ACTIVE = NO_TASK;
+    	Led_Off();
     }
     else{
     	//error;
@@ -118,6 +122,8 @@ void Chain_task(uint8_t task_ID){
 }
 
 void Scheduler() {
+    asm("ADD sp, sp, #0x08");
+
     uint8_t highestPriorityTask = TASKS;
     uint8_t Highest_priority = 0;
 
@@ -142,7 +148,9 @@ void Scheduler() {
     //  Poner la tarea actual en READY si hay una activa
     if (TASK_ACTIVE != NO_TASK) {
         task_list[TASK_ACTIVE].state = TASK_READY;
+
     }
+
 
     //  Activar la nueva tarea con mayor prioridad
     task_list[highestPriorityTask].state = TASK_RUNNING;

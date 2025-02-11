@@ -6,6 +6,7 @@
 
 #define TASKS 3
 #define NO_TASK 10
+#define REGISTERS 8
 
 extern uint8_t TASK_ACTIVE; //Guarda el indice de la lista de la tarea que esta en running
 
@@ -51,6 +52,7 @@ typedef struct{
 	TaskFunction task_ptr;
 	Task_State state;
 	Task_Created Task_Create;
+	uint32_t *stackpointer;
 
 }Task;
 
