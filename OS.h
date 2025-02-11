@@ -5,15 +5,15 @@
 #include <stdint.h>
 
 #define TASKS 3
+#define NO_TASK 10
 
 extern uint8_t TASK_ACTIVE; //Guarda el indice de la lista de la tarea que esta en running
-
-
 
 typedef enum{
 	AUTOSTART_FALSE,
 	AUTOSTART_TRUE
 }Autostart;
+
 
 typedef enum{
 	NON_PREEMPTIVE,
@@ -25,7 +25,6 @@ typedef enum{
 	TASK_READY,
 	TASK_RUNNING
 }Task_State;
-
 
 
 typedef uint8_t Task_Limit;
@@ -57,12 +56,12 @@ typedef struct{
 
 extern Task task_list[TASKS];
 
-void OS_init();
+void OS_init(void);
 void Activate_task(uint8_t task_ID);
-void Terminate_task();
+void Terminate_task(void);
 void Chain_task(uint8_t task_ID);
-void Scheduler();
+void Scheduler(void);
 void Create_task(uint8_t Task_ID, uint8_t Priority, SchedulingPolicy Schedule, Autostart Autostart, TaskFunction Ptr_Task);
-
+void SleepMode(void);
 
 #endif /* OS_OS_H_ */
