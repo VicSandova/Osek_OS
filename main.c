@@ -28,7 +28,6 @@ int main(void) {
 
 	while(1){
 
-		SleepMode();
 	}
 
 }
@@ -38,13 +37,13 @@ void Task_AF(){
 
 	Led_Red();
 	Activate_task(1);
-
+	Led_Red();
 	Terminate_task();
 
 }//nunca se ejecuta la llave
 
 void Task_BF(){
-//asm(add 8)
+
 	Led_Blue();
 	Chain_task(2);
 

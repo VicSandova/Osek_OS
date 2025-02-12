@@ -10,6 +10,8 @@
 
 extern uint8_t TASK_ACTIVE; //Guarda el indice de la lista de la tarea que esta en running
 
+extern uint32_t ptr; // Declaración externa si está en otro archivo
+
 typedef enum{
 	AUTOSTART_FALSE,
 	AUTOSTART_TRUE
@@ -52,7 +54,7 @@ typedef struct{
 	TaskFunction task_ptr;
 	Task_State state;
 	Task_Created Task_Create;
-	uint32_t *stackpointer;
+	void *ptr_context;
 
 }Task;
 
